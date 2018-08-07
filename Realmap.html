@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <!-- <title>Map</title> -->
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #mapCanvas {
+        height: 75%;
+        width: 75%;
+        }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Poverty Around the World</h3>
+    <div id="mapCanvas"></div>
+    <script>
+
+    function initMap() {
+        var map;
+        var bounds = new google.maps.LatLngBounds();
+        var mapOptions = {
+            mapTypeId: 'roadmap'
+        };
+
+        // Display a map on the web page
+        map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
+        map.setTilt(50);
+
+        // Multiple markers location, latitude, and longitude
+        var markers = [
+            ['Liberia', 6.300774, -10.797160],
+            ['Brazil', -23.533773, -46.625290],
+            ['Vietnam', 10.762622, 106.660172],
+            ['Central African Republic', 6.6194073, 20.9367017],
+            ['Domican Republic', 19.780769, -70.687111],
+            ['Bolivia', -16.970662, -64.269605],
+            ['Mongolia', 47.921230, 106.918556]
+        ];
+
+        // Info window content
+        var infoWindowContent = [
+            ['<div class="info_content">' +
+            '<h3>Liberia</h3>' +
+            '<p>Cowboys Stadium uses more electricity than Liberia. '+
+            'During moments of peak demand on game day, the 80,000-seat stadium may consume up to 10 megawatts of electricity. '+
+            'Liberia has the capacity to pump less than a third as much power into its national grid.</p>'],
+            ['<div class="info_content">' +
+            '<h3>Brazil</h3><p>Estimates on the numbers of Brazilian street children vary from 200,000 to 8 million. In one recent survey in São Paulo, '+
+            '609 children were found to be sleeping on the streets. At least 50 were under 12 and unaccompanied by adult relations.</p>' +
+            '</div>'],
+            ['<div class="info_content">' +
+            '<h3>Vietnam</h3>' +
+            '<p>Fifty percent of the population still lives on less than US$2 a day and many remain vulnerable to sliding back into poverty as a'+
+            ' result of either economic shocks or natural disasters.</p>' +
+            '</div>'],
+            ['<div class="info_content">' +
+            '<h3>Central African Republic</h3>'+
+            'Roughly 90 per cent of the population live in crippling poverty, without access to food, sanitation and decent housing. In rural areas, '+
+            'clean water is often not available, which abets the spread of numerous diseases. Around 40 per cent of the population lack access to regular meals.'+
+            '</div>'],
+            ['<div class="info_content">'+
+            '<h3>Dominican Republic</h3>'+
+            '<p>Since the government does not provide more than 4 percent of GDP spending on education, only 30 percent of children finish primary school. '+
+            'In a system where education is the road to the middle class, creating economic barriers to education perpetuates a system of institutional'+
+            'inequality.'],
+            ['<div class="info_content">'+
+            '<h3>Bolivia</h3>'+
+            'The majority of the women in rural areas have less access to training as well as technical or credit assistance.'+
+            ' Likewise, they have little access to education and health services. Thus, the high seasonal migration within the'+
+            ' nation has put the strain on rural households that are within the poverty line.'],
+            ['<div class="info_content">'+
+            '<h3> Mongolia</h3>'+
+            'As the demand for coal and copper – Mongolia’s primary mineral resources – continues to fall, it will become '+
+            'imperative to develop a new industry to support the ongoing drop in its poverty rate.']
+        ];
+
+        // Add multiple markers to map
+        var infoWindow = new google.maps.InfoWindow(), marker, i;
+
+        // Place each marker on the map
+        for( i = 0; i < markers.length; i++ ) {
+            var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+            bounds.extend(position);
+            marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: markers[i][0]
+            });
+
+            // Add info window to marker
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    infoWindow.setContent(infoWindowContent[i][0]);
+                    infoWindow.open(map, marker);
+                }
+            })(marker, i));
+
+            // Center the map to fit all markers on the screen
+            map.fitBounds(bounds);
+        }
+
+        // Set zoom level
+        var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+            this.setZoom(2);
+            google.maps.event.removeListener(boundsListener);
+        });
+
+    }
+    // Load initialize function
+    google.maps.event.addDomListener(window, 'load', initMap);
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdQgYkHcGPbrscc-Niafm7TRWUr-TVZIk&callback=initMap">
+    </script>
+  </body>
+</html>
